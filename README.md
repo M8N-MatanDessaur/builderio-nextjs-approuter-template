@@ -27,11 +27,6 @@ A production-ready, scalable starter template for building modern web applicatio
 - **Clean Architecture** - Separation of concerns with clear project structure
 - **Modern Dependencies** - Latest React and Next.js versions
 
-## 🔍 Demo & Examples
-
-Check out our example implementation:
-[Builder.io Template Example](https://www.builder.my/p/bfb8730a5a174f32b5165569a8d49fad/ce319b31885b472686ba84455c865cde)
-
 ## 🚦 Getting Started
 
 ### Prerequisites
