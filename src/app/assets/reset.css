@@ -41,7 +41,7 @@
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeSpeed;
     scroll-behavior: smooth;
-    font-family: 'Proxima Nova', Arial, sans-serif;
+    font-family: var(--font-primary);
   }
 
   

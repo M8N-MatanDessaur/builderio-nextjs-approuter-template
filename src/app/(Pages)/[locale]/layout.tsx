@@ -8,8 +8,6 @@
 // This layout is used for all pages that don't have a specific layout
 // page.tsx will use this layout to render the page content
 // This layout can be customized to include a header, footer, or other common elements
-
-import "../../assets/fonts.css";
 import "../../assets/reset.css";
 import "../../assets/brand.css";
 
