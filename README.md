@@ -13,11 +13,9 @@ A production-ready, scalable starter template for building modern web applicatio
 - **Next.js 15 App Router** - Server components, nested layouts, and route groups
 - **Optimized Build** - CSS optimization with Beasties, bundle analysis, and image optimization
 - **TypeScript** - Full type safety throughout the project
-- **Production-ready** - Proper caching strategies and error handling
 
 ### 🧩 Builder.io Integration
 - **Visual CMS** - Content creation and editing without code changes
-- **Intelligent Caching** - Content-type aware caching strategies
 - **Builder DevTools** - Integrated Builder.io developer tools
 - **Multi-model Support** - Support for various Builder.io content models
 
