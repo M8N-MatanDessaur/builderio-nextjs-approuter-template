@@ -15,9 +15,6 @@ const ClientPage = ({
 }) => {
   const isPreviewing = useIsPreviewing();
   
-  // Using locale directly from props
-  // No client-side state management needed
-
   // Handle invalid locale
   if (!isValidLocale) {
     return null;
