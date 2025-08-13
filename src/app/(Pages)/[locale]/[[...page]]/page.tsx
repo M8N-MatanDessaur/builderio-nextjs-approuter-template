@@ -9,7 +9,7 @@ export const revalidate = 10
 import { fetchBuilderContent} from "@/utils/builderUtils";
 import { getLocaleFromParams } from "@/utils/localeUtils";
 import { notFound } from "next/navigation";
-import ClientPage from "./ClientPage";
+import ClientPage from "@/components/common/ClientPage";
 
 // Page parameters interface
 interface PageParams {
@@ -46,11 +46,9 @@ export default async function Page({ params }: { params: PageProps['params'] }) 
   const content = await fetchBuilderContent(urlPath, locale, "page");
   
   return (
-    <>
       <ClientPage 
         content={content} 
         locale={locale} 
       />
-    </>
   );
 }

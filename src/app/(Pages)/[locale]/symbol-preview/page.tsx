@@ -9,7 +9,7 @@ export const revalidate = 10
 import { fetchBuilderContent} from "@/utils/builderUtils";
 import { getLocaleFromParams } from "@/utils/localeUtils";
 import { notFound } from "next/navigation";
-import ClientPage from "./ClientPage";
+import ClientPage from "@/components/common/ClientPage";
 
 // Page parameters interface
 interface PageParams {
@@ -26,7 +26,7 @@ interface PageProps {
  * @file Symbol Preview Page
  * @description Server component for rendering symbol previews dynamically
  */
-export default async function Page({ params }: PageProps) {
+export default async function Page({ params }: { params: PageProps['params'] }) {
   const resolvedParams = await params; // Wait for params to resolve
   const locale = resolvedParams.locale; // Get locale from params
 
@@ -36,22 +36,21 @@ export default async function Page({ params }: PageProps) {
     locale: locale
   });
 
+  // Handle invalid locales at the server level
+  if (!isLocaleValid) {
+    // This will trigger Next.js to show the 404 page
+    notFound();
+  }
+
   const urlPath = "/symbol-preview/symbol";
   const builderModelName = "symbol"; // Model name for the symbol
   const content = await fetchBuilderContent(urlPath, locale, builderModelName);
   
-  // Handle invalid locales at the server level
-  if (!isLocaleValid) {
-    // This will trigger Next.js to show the 404 page
-    return notFound();
-  }
-  
   return (
-    <>
       <ClientPage 
         content={content} 
         locale={locale} 
+        model={builderModelName}
       />
-    </>
   );
 }
