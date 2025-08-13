@@ -10,7 +10,7 @@ import { ReactNode } from 'react';
  * @description Reusable client-side component for rendering Builder content with custom components before/after
  * or using a completely custom component instead of BuilderComponent
  */
-const ClientPage = ({
+const BuilderPageRenderer = ({
   locale,
   content,
   beforeContent,
@@ -54,4 +54,4 @@ const ClientPage = ({
   return notFound();
 };
 
-export default ClientPage;
+export default BuilderPageRenderer;
