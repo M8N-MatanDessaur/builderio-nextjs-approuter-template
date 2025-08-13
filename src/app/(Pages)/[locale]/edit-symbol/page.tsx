@@ -42,7 +42,7 @@ export default async function Page({ params }: { params: PageProps['params'] }) 
     notFound();
   }
 
-  const urlPath = "/symbol-preview/symbol";
+  const urlPath = "/edit-symbol";
   const builderModelName = "symbol"; // Model name for the symbol
   const content = await fetchBuilderContent(urlPath, locale, builderModelName);
   
