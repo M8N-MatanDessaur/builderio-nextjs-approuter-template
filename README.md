@@ -49,8 +49,9 @@ yarn install
 
 3. Create a `.env.local` file based on `.env.example` and add your Builder.io API key:
 ```
-NEXT_PUBLIC_BUILDER_API_KEY=YOUR_API_KEY_HERE
-NEXT_PUBLIC_SITE_URL=http://localhost:3000/
+NEXT_PUBLIC_BUILDER_API_KEY=YOUR_API_KEY_HERE # for builder content fetching
+NEXT_PUBLIC_SITE_URL=http://localhost:3000/ # for seo
+BUILDER_PRIVATE_KEY=YOUR_PRIVATE_KEY_HERE # for admin api (ex: get valid locales)
 ```
 
 4. Run the development server:
