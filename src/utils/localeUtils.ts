@@ -1,12 +1,12 @@
-// List of valid locales in your application
-// Sync with the locales in your i18n configuration or CMS (builder.io)
-// This list is used to validate the locale extracted from the URL
-export const VALID_LOCALES = [
-  'en',
-];
+import { createAdminApiClient } from '@builder.io/admin-sdk';
+const adminSDK = createAdminApiClient(process.env.BUILDER_PRIVATE_KEY!);
 
 // Default locale to use when none is specified in the URL
 export const DEFAULT_LOCALE = 'en';
+
+// List of valid locales in your application from Builder.io settings
+const builderSettings = await adminSDK.query({settings: true,});
+export const VALID_LOCALES = builderSettings?.data?.settings?.customTargetingAttributes?.locale?.enum || [];
 
 /**
  * Checks if a given locale is valid by comparing it against the predefined list of valid locales.
@@ -25,28 +25,28 @@ export const isValidLocale = (locale: string): boolean => {
 export const getLocaleFromParams = async (params: { page?: string[]; locale?: string }): Promise<{ locale: string; urlPath: string; isLocaleValid: boolean }> => {
   const resolvedParams = await params;
   const pageSegments = resolvedParams.page || [];
-
-  // If no segments (root URL) or empty segments, use default locale
-  if (pageSegments.length === 0) {
-    return { 
-      locale: DEFAULT_LOCALE, 
-      urlPath: "/", 
-      isLocaleValid: true 
-    };
-  }
-
-  // Handle the [locale] route pattern
+  
+  // Handle the [locale] route pattern (when locale is explicitly provided in params)
   if (resolvedParams.locale) {
     const isLocaleValid = isValidLocale(resolvedParams.locale);
-    // If locale is invalid, use DEFAULT_LOCALE instead
     return { 
-      locale: isLocaleValid ? resolvedParams.locale : DEFAULT_LOCALE, 
-      urlPath: "/" + (pageSegments.join("/") || ""), 
-      isLocaleValid 
+      locale: resolvedParams.locale, // Keep the provided locale for reference
+      urlPath: "/" + (pageSegments.join("/") || ""),
+      isLocaleValid // This will be false if the locale is invalid
     };
   }
-
-  // For [...page] route pattern
+  
+  // For [...page] route pattern or default handling
+  if (pageSegments.length === 0) {
+    // Root URL or empty segments, use default locale
+    return {
+      locale: DEFAULT_LOCALE,
+      urlPath: "/",
+      isLocaleValid: true
+    };
+  }
+  
+  // Check if first segment is a valid locale
   const firstSegment = pageSegments[0];
   const isFirstSegmentValidLocale = isValidLocale(firstSegment);
 

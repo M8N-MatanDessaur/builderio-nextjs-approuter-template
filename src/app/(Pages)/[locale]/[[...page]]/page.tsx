@@ -9,6 +9,7 @@ export const revalidate = 10
 import React from "react";
 import { fetchBuilderContent} from "@/utils/builderUtils";
 import { getLocaleFromParams } from "@/utils/localeUtils";
+import { notFound } from "next/navigation";
 import ClientPage from "./ClientPage";
 
 interface PageParams {
@@ -29,6 +30,14 @@ export default async function Page({ params }: { params: PageProps['params'] }) 
     page: resolvedParams.page,
     locale
   });
+
+  console.log(urlPath, isLocaleValid, locale);
+  
+  // Handle invalid locales at the server level
+  if (!isLocaleValid) {
+    // This will trigger Next.js to show the 404 page
+    notFound();
+  }
   
   // Fetch content with appropriate cache strategy based on URL path type
   const content = await fetchBuilderContent(urlPath, locale, "page");

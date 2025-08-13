@@ -7,7 +7,7 @@ import '@/builder-registry';
 const ClientPage = ({
   locale,
   content,
-  isValidLocale,
+  isValidLocale, // We keep this prop but it's handled server-side now
 }: {
   locale: string;
   content: any;
@@ -18,11 +18,6 @@ const ClientPage = ({
   
   // Using locale directly from props
   // No client-side state management needed
-
-  // Handle invalid locale
-  if (!isValidLocale) {
-    return null;
-  }
 
   // Handle missing content or invalid locale
   if (content || isPreviewing || isEditing) {
