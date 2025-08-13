@@ -4,22 +4,21 @@ import { BuilderComponent, useIsPreviewing, Builder } from "@builder.io/react";
 import { notFound } from "next/navigation";
 import '@/builder-registry';
 
+/**
+ * @file Client Page Component
+ * @description Client-side component for rendering dynamic pages
+ */
 const ClientPage = ({
   locale,
   content,
-  isValidLocale, // We keep this prop but it's handled server-side now
 }: {
   locale: string;
   content: any;
-  isValidLocale: boolean;
 }) => {
-  const isPreviewing = useIsPreviewing();
-  const isEditing = Builder.isEditing;
+  const isPreviewing = useIsPreviewing(); // Check if in preview mode
+  const isEditing = Builder.isEditing; // Check if in editing mode
   
-  // Using locale directly from props
-  // No client-side state management needed
-
-  // Handle missing content or invalid locale
+  // If content exists or in preview/editing mode, render the page
   if (content || isPreviewing || isEditing) {
     return (
       <BuilderComponent
@@ -33,7 +32,7 @@ const ClientPage = ({
     );
   }
 
-  // Handle page not found
+  // If no content found, return 404
   return notFound();
 };
 

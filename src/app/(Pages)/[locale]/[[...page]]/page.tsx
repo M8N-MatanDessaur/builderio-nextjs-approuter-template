@@ -6,32 +6,35 @@ export const revalidate = 10
  * @description Handles dynamic routing and content fetching from Builder.io
  */
 
-import React from "react";
 import { fetchBuilderContent} from "@/utils/builderUtils";
 import { getLocaleFromParams } from "@/utils/localeUtils";
 import { notFound } from "next/navigation";
 import ClientPage from "./ClientPage";
 
+// Page parameters interface
 interface PageParams {
   locale: string;
   page?: string[];
 }
 
+// Page component props
 interface PageProps {
   params: Promise<PageParams>;
 }
 
-// Server component for dynamic routing
+/**
+ * @file Dynamic Page Router
+ * @description Handles dynamic routing and content fetching from Builder.io
+ */
 export default async function Page({ params }: { params: PageProps['params'] }) {
-  const resolvedParams = await params;
-  const locale = resolvedParams.locale;
+  const resolvedParams = await params; // Wait for params to resolve
+  const locale = resolvedParams.locale; // Get locale from params
   
+  // Get URL path and validate locale
   const { urlPath, isLocaleValid } = await getLocaleFromParams({
     page: resolvedParams.page,
     locale
   });
-
-  console.log(urlPath, isLocaleValid, locale);
   
   // Handle invalid locales at the server level
   if (!isLocaleValid) {
@@ -47,7 +50,6 @@ export default async function Page({ params }: { params: PageProps['params'] }) 
       <ClientPage 
         content={content} 
         locale={locale} 
-        isValidLocale={isLocaleValid}
       />
     </>
   );
