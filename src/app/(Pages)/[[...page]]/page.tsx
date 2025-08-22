@@ -7,7 +7,7 @@ export const revalidate = 10
  */
 
 import { fetchBuilderContent} from "@/utils/builderUtils";
-import { getLocaleFromParams } from "@/utils/localeUtils";
+import { getLocaleFromParams, DEFAULT_LOCALE } from "@/utils/localeUtils";
 import { notFound } from "next/navigation";
 import BuilderPageRenderer from "@/components/common/BuilderPageRenderer";
 
@@ -28,12 +28,11 @@ interface PageProps {
  */
 export default async function Page({ params }: { params: PageProps['params'] }) {
   const resolvedParams = await params; // Wait for params to resolve
-  const locale = resolvedParams.locale; // Get locale from params
   
   // Get URL path and validate locale
   const { urlPath, isLocaleValid } = await getLocaleFromParams({
     page: resolvedParams.page,
-    locale
+    locale: DEFAULT_LOCALE
   });
   
   // Handle invalid locales at the server level
@@ -43,14 +42,14 @@ export default async function Page({ params }: { params: PageProps['params'] }) 
   }
   
   // Fetch content with appropriate cache strategy based on URL path type
-  const content = await fetchBuilderContent(urlPath, locale, "page");
+  const content = await fetchBuilderContent(urlPath, DEFAULT_LOCALE, "page");
   
   if (!content) return notFound();
   
   return (
       <BuilderPageRenderer 
         content={content} 
-        locale={locale} 
+        locale={DEFAULT_LOCALE} 
       />
   );
 }

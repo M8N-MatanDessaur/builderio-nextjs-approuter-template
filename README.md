@@ -72,14 +72,23 @@ nextjs-builder-template/
 │   ├── actions/          # Server actions
 │   ├── app/              # App Router routes
 │   │   ├── (Pages)/      # Main page routes
-│   │   │   ├── [locale]/ # Locale-specific routes
+│   │   │   ├── [[...page]]/   # Non-localized catch-all route
+│   │   │   │   ├── layout.tsx # Root layout template
+│   │   │   │   └── page.tsx   # Content resolver for default locale
+│   │   │   └── [locale]/      # Locale-specific routes
+│   │   │       ├── [[...page]]/  # Localized catch-all route
+│   │   │       │   └── page.tsx  # Content resolver with locale context
+│   │   │       └── layout.tsx    # Localized layout template
 │   │   ├── api/          # API routes
-│   │   ├── assets/       # CSS and other assets
+│   │   └── assets/       # CSS and other assets
 │   ├── builder-registry.ts  # Builder.io registration
 │   ├── components/       # Shared UI components
 │   ├── hooks/            # Custom React hooks
 │   ├── store/            # State management
 │   └── utils/            # Utility functions
+│       ├── builderUtils.ts  # Builder.io content fetching helpers
+│       ├── localeUtils.ts   # Locale detection and validation
+│       └── metadata.ts      # Shared metadata generation
 ├── next.config.ts        # Next.js configuration
 ├── tsconfig.json         # TypeScript configuration
 └── package.json          # Dependencies and scripts
@@ -90,8 +99,15 @@ nextjs-builder-template/
 1. Create an account on [Builder.io](https://builder.io)
 2. Create a new space or use an existing one
 3. Get your API key from Builder.io dashboard > Account Settings > API Keys
-4. Set up your content models in Builder.io
-5. Connect your models with the template by adding them to the `builder-registry.ts` file
+4. Set up the following environment variables in your `.env.local` file:
+
+```
+NEXT_PUBLIC_BUILDER_API_KEY=your-public-api-key
+NEXT_PUBLIC_SITE_URL=http://localhost:3000 # or your production URL
+BUILDER_PRIVATE_KEY=your-private-key # needed for locale fetching from Admin API
+```
+5. Set up your content models in Builder.io
+6. Connect your models with the template by adding them to the `builder-registry.ts` file
 
 ## 🎨 Customization
 
@@ -101,8 +117,36 @@ Edit `src/app/assets/brand.css` to customize the global styles and design tokens
 ### Components
 Add new components in `src/components/` and register them with Builder.io in `src/builder-registry.ts`.
 
+### Routing & Content Resolution
+
+This template implements two main routing patterns:
+
+1. **Default Catch-all Route** (`/[[...page]]`):
+   - Handles the homepage (`/`) and non-localized content paths
+   - Uses the default locale (automatically determined from Builder.io settings)
+   - Falls back to the 404 page if content isn't found
+
+2. **Localized Catch-all Route** (`/[locale]/[[...page]]`):
+   - Handles all locale-specific content (e.g., `/en/about`, `/fr/contact`)
+   - Validates the requested locale against Builder.io settings
+   - Maintains the same URL structure within each locale
+
+Both routes use Incremental Static Regeneration (ISR) with a 10-second revalidation period, which can be adjusted in the page files.
+
 ### Localization
-Add or modify locales in the URL structure `/[locale]/...` where locale is a language-region code (e.g., 'en').
+
+Add or modify locales in the URL structure `/[locale]/...` where locale is a language code (e.g., 'en', 'fr'). The available locales are automatically fetched from your Builder.io settings through the Admin API.
+
+### Metadata Generation
+
+The template includes a shared metadata utility (`src/utils/metadata.ts`) that generates consistent SEO metadata for all pages:
+
+- **Core functionality**: `generateSiteMetadata()` creates standardized metadata objects for Next.js pages
+- **Localization support**: Automatically adapts titles, descriptions, and OpenGraph properties based on locale
+- **Environment variables**: Uses `NEXT_PUBLIC_SITE_URL` for absolute URLs in metadata
+- **Implementation**: Used in both default and localized layout files to avoid code duplication
+
+To customize site-wide metadata, edit the `generateSiteMetadata` function in `src/utils/metadata.ts`.
 
 ## 🚀 Deployment
 

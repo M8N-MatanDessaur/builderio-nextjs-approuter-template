@@ -1,12 +1,11 @@
 import { createAdminApiClient } from '@builder.io/admin-sdk';
 const adminSDK = createAdminApiClient(process.env.BUILDER_PRIVATE_KEY!);
 
-// Default locale to use when none is specified in the URL
-export const DEFAULT_LOCALE = 'en';
-
 // List of valid locales in your application from Builder.io settings
 const builderSettings = await adminSDK.query({settings: true,});
 export const VALID_LOCALES = builderSettings?.data?.settings?.customTargetingAttributes?.locale?.enum || [];
+export const DEFAULT_LOCALE = VALID_LOCALES[-1] || 'en';
+
 
 /**
  * Checks if a given locale is valid by comparing it against the predefined list of valid locales.
