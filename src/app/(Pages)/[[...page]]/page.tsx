@@ -2,7 +2,7 @@ export const dynamic = 'force-static'
 export const revalidate = 10
 
 /**
- * @file Dynamic Catch-all Route for Builder.io Localized Content
+ * @file Dynamic Catch-all Route for Builder.io Content
  * @description Resolves Builder content server-side and falls back to a "not found" page
  */
 
@@ -23,7 +23,7 @@ interface PageProps {
 }
 
 /**
- * @file Dynamic Localized Catch-all Page Router
+ * @file Dynamic Catch-all Page Router
  * @description Handles dynamic routing and content fetching from Builder.io
  */
 export default async function Page({ params }: { params: PageProps['params'] }) {
@@ -46,7 +46,7 @@ export default async function Page({ params }: { params: PageProps['params'] }) 
   const content = await fetchBuilderContent(urlPath, locale, "page");
   
   if (!content) return notFound();
-
+  
   return (
       <BuilderPageRenderer 
         content={content} 
