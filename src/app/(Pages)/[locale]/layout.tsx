@@ -11,6 +11,9 @@
 import "../../assets/reset.css";
 import "../../assets/brand.css";
 
+// Import shared metadata utility
+import { generateSiteMetadata } from "@/utils/metadata";
+
 interface layoutParams {
   locale: string;
   page?: string[];
@@ -21,38 +24,9 @@ export async function generateMetadata({ params }: { params: Promise<layoutParam
   // Get params in a way that doesn't trigger the dynamic API error
   const resolvedParams = await params;
   const locale = resolvedParams.locale;
-  return {
-    title: `Next.js Builder.io Template | ${locale}`,
-    description: "A clean, optimized Next.js and Builder.io template",
-    metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://localhost:3000'),
-    formatDetection: {
-      telephone: false, // Disable automatic phone number detection
-    },
-    openGraph: {
-      title: `Next.js Builder.io Template | ${locale}`,
-      description: "A clean, optimized Next.js and Builder.io template",
-      locale: locale.replace('-', '_')
-    },
-    robots: {
-      index: true,
-      follow: true
-    },
-    authors: [
-      { name: 'Next.js Builder.io Template' }
-    ],
-    keywords: ['nextjs', 'builder.io', 'template'],
-    icons: {
-      icon: '/favicon.ico',
-    },
-    other: {
-      'dns-prefetch': [
-        'https://cdn.builder.io',
-      ],
-      preconnect: [
-        'https://cdn.builder.io',
-      ]
-    }
-  };
+  
+  // Use the shared metadata utility with the locale
+  return generateSiteMetadata(locale);
 }
 
 export default async function RootLayout({
